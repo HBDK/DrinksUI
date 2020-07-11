@@ -1,5 +1,33 @@
 ﻿@page "/"
 
+@using DrinksUI.Dtos
+@using DrinksUI.Data.Servies
+
+@inject DrinkService DrinkService
+
 <h1>Hello, world!</h1>
 
 Welcome to your new app.
+
+<br>
+<br>
+<br>
+<ul>
+@foreach (var drink in _drinks)
+{
+    
+    <li>
+        <a href="drink/@drink.id">@drink.Name</a>
+    </li>
+}
+</ul>
+
+
+@code {
+    private IEnumerable<IDrinkShortDescription> _drinks;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _drinks = await DrinkService.GetShortDescriptions();
+    }
+}

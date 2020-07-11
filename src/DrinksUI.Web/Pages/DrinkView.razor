@@ -1,0 +1,45 @@
+﻿@page "/drink/{DrinkId:int}"
+
+@using DrinksUI.Data.Types
+@using DrinksUI.Data.Servies;
+
+@inject DrinkService DrinkService
+
+<h3>@_drink.Name</h3>
+
+@_drink.description
+
+<br>
+<br>
+<h5>Ingredients:</h5>
+<ul>
+@foreach (var addi in _drink.Addis)
+{
+    
+    <li>
+        @addi.Display
+    </li>
+}
+</ul>
+
+<button @onclick="SendPourRequest">Pour</button>
+
+@code {
+    [Parameter]
+    public int DrinkId { get; set; }
+    private Drink _drink { get; set; }
+    private int test{get;set;} = 2;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _drink = await DrinkService.GetDrink(DrinkId);
+        test = 3;
+    }
+
+    private void SendPourRequest()
+    {
+
+    }
+
+
+}

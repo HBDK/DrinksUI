@@ -8,11 +8,14 @@ namespace DrinksUI.Data.Servies
 {
     public class DrinkService
     {
+        private DrinkContext _drinkContext;
         private List<Drink> _drinks;
         private List<Ingredient> _ingredients;
 
-        public DrinkService()
+        public DrinkService(DrinkContext drinkContext)
         {
+            _drinkContext = drinkContext;
+
             _ingredients = new List<Ingredient>(){
                 new Ingredient(){Type = "Vodka", AddiType = AddiType.PushDosed, Unit = Unit.CL}, //0
                 new Ingredient(){Type = "Gin", AddiType = AddiType.PushDosed, Unit = Unit.CL}, // 1
@@ -25,10 +28,12 @@ namespace DrinksUI.Data.Servies
                 new Ingredient(){Type = "Lemon Slice", AddiType = AddiType.Extra, Unit = Unit.Pcs} // 8
             };
 
+            _drinkContext.Ingredients.AddRange(_ingredients.Select(x => new Models.IngredientModel(){Type = x.Type, Unit = x.Unit, AddiType = x.AddiType}));
 
             _drinks = new List<Drink>(){
                 new Drink(_ingredients[0], _ingredients[6]){Name = "screwDriver", description = "dsaf"},
                 new Drink(_ingredients[2], _ingredients[4]){Name = "Rum n coke", description = "dsaf"},
+                new Drink(_ingredients[3], _ingredients[7], _ingredients[8]){Name = "Død", description = "dsaf"}
             };
         }
 
@@ -39,7 +44,7 @@ namespace DrinksUI.Data.Servies
 
         public Task<IEnumerable<IDrinkShortDescription>> GetShortDescriptions()
         {
-            IEnumerable<IDrinkShortDescription> result = _drinks.Select(x => new DrinkShortDescription(){Name = x.Name, id = _drinks.IndexOf(x), ImageUrl = ""}).AsEnumerable();
+            IEnumerable<IDrinkShortDescription> result = _drinks.Select(x => new DrinkShortDescription(){Name = x.Name, id = _drinks.IndexOf(x), ImageUrl = x.ImageUrl}).AsEnumerable();
             return Task.FromResult(result);
         }
     }

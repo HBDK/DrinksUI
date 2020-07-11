@@ -8,6 +8,7 @@ namespace DrinksUI.Data.Types
         public IList<Addi> Addis { get; set; }
         public string Name { get; set; }
         public string description { get; set; }
+        public string ImageUrl {get; set;}
 
         public Drink(params Ingredient[] ingredients)
         {
@@ -15,13 +16,8 @@ namespace DrinksUI.Data.Types
 
             foreach (var ingredient in ingredients)
             {
-                Addis.Add(new Addi(){Ingredient = ingredient, Amount = new Amount(){Unit = Unit.CL, value = 1}});
+                Addis.Add(new Addi(){Ingredient = ingredient, Amount = 1});
             }
-        }
-
-        public Drink()
-        {
-            
         }
     }
 }

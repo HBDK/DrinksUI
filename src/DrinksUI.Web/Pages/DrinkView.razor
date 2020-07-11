@@ -12,34 +12,44 @@
 <br>
 <br>
 <h5>Ingredients:</h5>
-<ul>
-@foreach (var addi in _drink.Addis)
-{
-    
-    <li>
-        @addi.Display
-    </li>
-}
-</ul>
 
-<button @onclick="SendPourRequest">Pour</button>
+<EditForm Model=@_drink>
+        @foreach (var addi in _drink.Addis.Where(x => x.IsLiquid))
+        {
+            <div class="row"> 
+                <div class="col-sm-2">  
+                    <InputNumber @bind-Value=addi.Amount class="form-control" id="@addi.Name"/>
+                </div>
+                <div class="col-sm-5"> 
+                    <label for=@addi.Name>@addi.UnitAndName</label>
+                </div>  
+            </div><br>
+        }
+
+        @foreach (var addi in _drink.Addis.Where(x => !x.IsLiquid))
+        {
+            <div class="row"> 
+                <div class="col-sm-5"> 
+                    @addi.Display
+                </div>  
+            </div><br>
+        }
+    <input type="submit" class="btn btn-primary" value="Pour"/>
+</EditForm>
 
 @code {
     [Parameter]
     public int DrinkId { get; set; }
     private Drink _drink { get; set; }
-    private int test{get;set;} = 2;
 
     protected override async Task OnInitializedAsync()
     {
         _drink = await DrinkService.GetDrink(DrinkId);
-        test = 3;
     }
 
-    private void SendPourRequest()
+    void FormSubmitted(EditContext editContext)
     {
-
+        bool formIsValid = editContext.Validate();
+        Console.WriteLine(_drink.Name);
     }
-
-
 }

@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrinksUI.Dtos", "DrinksUI.D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrinksUI.Test", "DrinksUI.Test\DrinksUI.Test.csproj", "{491F9CA9-7A3D-44AE-A404-176A522B3C9F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrinksUI.CommanLineTools", "DrinksUI.CommanLineTools\DrinksUI.CommanLineTools.csproj", "{D2DBA1B5-CC62-487D-8691-4F3B93932289}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,5 +74,17 @@ Global
 		{491F9CA9-7A3D-44AE-A404-176A522B3C9F}.Release|x64.Build.0 = Release|Any CPU
 		{491F9CA9-7A3D-44AE-A404-176A522B3C9F}.Release|x86.ActiveCfg = Release|Any CPU
 		{491F9CA9-7A3D-44AE-A404-176A522B3C9F}.Release|x86.Build.0 = Release|Any CPU
+		{D2DBA1B5-CC62-487D-8691-4F3B93932289}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2DBA1B5-CC62-487D-8691-4F3B93932289}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2DBA1B5-CC62-487D-8691-4F3B93932289}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D2DBA1B5-CC62-487D-8691-4F3B93932289}.Debug|x64.Build.0 = Debug|Any CPU
+		{D2DBA1B5-CC62-487D-8691-4F3B93932289}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D2DBA1B5-CC62-487D-8691-4F3B93932289}.Debug|x86.Build.0 = Debug|Any CPU
+		{D2DBA1B5-CC62-487D-8691-4F3B93932289}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2DBA1B5-CC62-487D-8691-4F3B93932289}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2DBA1B5-CC62-487D-8691-4F3B93932289}.Release|x64.ActiveCfg = Release|Any CPU
+		{D2DBA1B5-CC62-487D-8691-4F3B93932289}.Release|x64.Build.0 = Release|Any CPU
+		{D2DBA1B5-CC62-487D-8691-4F3B93932289}.Release|x86.ActiveCfg = Release|Any CPU
+		{D2DBA1B5-CC62-487D-8691-4F3B93932289}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

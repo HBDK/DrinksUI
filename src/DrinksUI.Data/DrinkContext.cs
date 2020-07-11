@@ -23,5 +23,18 @@ namespace DrinksUI.Data
                 options.UseSqlite("Data Source=../testdb.db");
             }
         }
+
+        protected override void OnModelCreating(ModelBuilder builder)    
+        {
+            builder.Entity<DrinkModel>()
+                .HasIndex(x => x.Name)
+                .IsUnique();
+
+            builder.Entity<IngredientModel>()
+                .HasIndex(x => x.Type)
+                .IsUnique();
+
+            
+        }
     }
 }

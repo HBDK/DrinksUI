@@ -2,6 +2,7 @@
 
 @using DrinksUI.Data.Types
 @using DrinksUI.Data.Servies;
+@using DrinksUI.Dtos;
 
 @inject DrinkService DrinkService
 
@@ -14,24 +15,30 @@
 <h5>Ingredients:</h5>
 
 <EditForm Model=@_drink>
-        @foreach (var addi in _drink.Addis.Where(x => x.IsLiquid))
-        {
-            <div class="row"> 
-                <div class="col-sm-2">  
-                    <InputNumber @bind-Value=addi.Amount class="form-control" id="@addi.Name"/>
-                </div>
-                <div class="col-sm-5"> 
-                    <label for=@addi.Name>@addi.UnitAndName</label>
-                </div>  
-            </div><br>
-        }
 
-        @foreach (var addi in _drink.Addis.Where(x => !x.IsLiquid))
+
+        @foreach (var addi in _drink.Addis.OrderBy(x => x.Ingredient.AddiType))
         {
             <div class="row"> 
-                <div class="col-sm-5"> 
-                    @addi.Display
-                </div>  
+                
+                    @if (addi.IsLiquid)
+                    {
+                        <div class="col-sm-2">  
+                            <InputNumber @bind-Value=addi.Amount class="form-control" id="@addi.Name"/>
+                        </div>
+                    }else
+                    {
+                        <div class="col-sm-5"> 
+                            @addi.Display
+                        </div>
+                    }
+                
+                    @if (addi.IsLiquid)
+                    {
+                        <div class="col-sm-5"> 
+                            <label for=@addi.Name>@addi.UnitAndName</label>
+                        </div>
+                    } 
             </div><br>
         }
     <input type="submit" class="btn btn-primary" value="Pour"/>

@@ -3,48 +3,34 @@ using System.Threading.Tasks;
 using DrinksUI.Data.Types;
 using DrinksUI.Dtos;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace DrinksUI.Data.Servies
 {
     public class DrinkService
     {
         private DrinkContext _drinkContext;
-        private List<Drink> _drinks;
-        private List<Ingredient> _ingredients;
 
         public DrinkService(DrinkContext drinkContext)
         {
             _drinkContext = drinkContext;
-
-            _ingredients = new List<Ingredient>(){
-                new Ingredient(){Type = "Vodka", AddiType = AddiType.PushDosed, Unit = Unit.CL}, //0
-                new Ingredient(){Type = "Gin", AddiType = AddiType.PushDosed, Unit = Unit.CL}, // 1
-                new Ingredient(){Type = "Rum", AddiType = AddiType.PushDosed, Unit = Unit.CL}, // 2
-                new Ingredient(){Type = "Tequila", AddiType = AddiType.PushDosed, Unit = Unit.CL}, // 3
-                new Ingredient(){Type = "Cola", AddiType = AddiType.Poured, Unit = Unit.CL}, // 4
-                new Ingredient(){Type = "Club soda", AddiType = AddiType.Poured, Unit = Unit.CL}, // 5
-                new Ingredient(){Type = "Apple juice", AddiType = AddiType.Poured, Unit = Unit.CL}, // 6
-                new Ingredient(){Type = "Salt", AddiType = AddiType.Extra, Unit = Unit.Pinches}, // 7
-                new Ingredient(){Type = "Lemon Slice", AddiType = AddiType.Extra, Unit = Unit.Pcs} // 8
-            };
-
-            _drinkContext.Ingredients.AddRange(_ingredients.Select(x => new Models.IngredientModel(){Type = x.Type, Unit = x.Unit, AddiType = x.AddiType}));
-
-            _drinks = new List<Drink>(){
-                new Drink(_ingredients[0], _ingredients[6]){Name = "screwDriver", description = "dsaf"},
-                new Drink(_ingredients[2], _ingredients[4]){Name = "Rum n coke", description = "dsaf"},
-                new Drink(_ingredients[3], _ingredients[7], _ingredients[8]){Name = "Død", description = "dsaf"}
-            };
+            _drinkContext.Database.EnsureCreated();
         }
 
-        public Task<Drink> GetDrink(int id)
+        public async Task<Drink> GetDrink(int id)
         {
-            return Task.FromResult(_drinks[id]);
+            var result = await _drinkContext.Drinks
+                                    .Include(Drink => Drink.Addis)
+                                    .ThenInclude(Addi => Addi.Ingredient)
+                                    .Where(y => y.Id == id)
+                                    .FirstOrDefaultAsync();
+            
+            return Drink.Create(result);
         }
 
         public Task<IEnumerable<IDrinkShortDescription>> GetShortDescriptions()
         {
-            IEnumerable<IDrinkShortDescription> result = _drinks.Select(x => new DrinkShortDescription(){Name = x.Name, id = _drinks.IndexOf(x), ImageUrl = x.ImageUrl}).AsEnumerable();
+            IEnumerable<IDrinkShortDescription> result = _drinkContext.Drinks.Select(x => new DrinkShortDescription(){Name = x.Name, id = x.Id, ImageUrl = x.ImageUrl}).AsEnumerable();
             return Task.FromResult(result);
         }
     }

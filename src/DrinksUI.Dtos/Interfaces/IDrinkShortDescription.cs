@@ -1,8 +1,8 @@
-namespace DrinksUI.Dtos
+namespace DrinksUI.Dtos.Interfaces
 {
     public interface IDrinkShortDescription
     {
-        int id {get;}
+        int Id {get;}
         string Name {get;}
         string ImageUrl{get;}        
     } 

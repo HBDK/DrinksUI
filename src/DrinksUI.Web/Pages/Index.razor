@@ -1,7 +1,8 @@
 ﻿@page "/"
 
 @using DrinksUI.Dtos
-@using DrinksUI.Data.Servies
+@using DrinksUI.Data.Services
+@using DrinksUI.Dtos.Interfaces
 
 @inject DrinkService DrinkService
 
@@ -17,7 +18,7 @@ Welcome to your new app.
 {
     
     <li>
-        <a href="drink/@drink.id">@drink.Name</a>
+        <a href="drink/@drink.Id">@drink.Name</a>
     </li>
 }
 </ul>

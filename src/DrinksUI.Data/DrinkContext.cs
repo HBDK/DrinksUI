@@ -9,6 +9,7 @@ namespace DrinksUI.Data
     {
         public DbSet<DrinkModel> Drinks { get; set; }
         public DbSet<IngredientModel> Ingredients { get; set; }
+        public DbSet<MachineSlotModel> MachinesSlots { get; set; }
 
         public DrinkContext(DbContextOptions<DrinkContext> options)
         : base(options)

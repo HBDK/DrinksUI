@@ -14,5 +14,6 @@ namespace DrinksUI.Data.Models
         public string ImageUrl {get; set;}
 
         public IDrink GetDto => new DrinkDto(Id, Name, Description, ImageUrl, Addies.Select(addie => addie.GetDto).ToArray());
+        public IDrinkShortDescription GetShortDto => new DrinkShortDescriptionDto(Id, Name, ImageUrl);
     }
 }

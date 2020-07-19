@@ -82,7 +82,7 @@ namespace DrinksUI.Test.Data
         }
 
         [Test]
-        public void CanCreateDto()
+        public void CanCreateDrinkDto()
         {
             var ingredients = new List<IngredientModel>(){
                 new IngredientModel(){Type = "Vodka", AddieType = AddieType.PushDosed, Unit = Unit.CL},
@@ -111,6 +111,34 @@ namespace DrinksUI.Test.Data
             Assert.That(dto.Description, Is.Not.Null);
             Assert.That(dto.Addies, Has.Count.EqualTo(2));
             Assert.That(dto.Addies[0].Amount, Is.Not.Null);
+        }
+
+        [Test]
+        public void CanCreateMachineSlotDto()
+        {
+            var ingredients = new List<IngredientModel>(){
+                new IngredientModel(){Type = "Vodka", AddieType = AddieType.PushDosed, Unit = Unit.CL},
+                new IngredientModel(){Type = "Lemon Slice", AddieType = AddieType.Extra, Unit = Unit.Pcs}
+            };
+
+            _context.AddRange(ingredients);
+            _context.SaveChanges();
+
+            _context.Add(new MachineSlotModel()
+            {
+                DispensingType = AddieType.PushDosed,
+                Ingredient = ingredients[0],
+                Proof = 40
+            });
+
+            _context.SaveChanges();
+
+            var slot = _context.MachinesSlots.First();
+            var dto = slot.GetDto;
+            Assert.That(dto, Is.Not.Null);
+            Assert.That(dto.Ingredient, Is.Not.Null);
+            Assert.That(dto.Proof, Is.EqualTo(40));
+            Assert.That(dto.DispensingType, Is.EqualTo(AddieType.PushDosed));
         }
     }
 }

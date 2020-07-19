@@ -1,26 +1,22 @@
 ﻿@page "/"
 
-@using DrinksUI.Dtos
 @using DrinksUI.Data.Services
 @using DrinksUI.Dtos.Interfaces
 
 @inject DrinkService DrinkService
 
-<h1>Hello, world!</h1>
-
-Welcome to your new app.
-
-<br>
-<br>
-<br>
+<p>
+    <h1>Hello, world!</h1>
+    Welcome to your new app.
+</p>
 <ul>
-@foreach (var drink in _drinks)
-{
-    
-    <li>
-        <a href="drink/@drink.Id">@drink.Name</a>
-    </li>
-}
+    @foreach (var drink in _drinks)
+    {
+
+        <li>
+            <a href="drink/@drink.Id">@drink.Name</a>
+        </li>
+    }
 </ul>
 
 @code {

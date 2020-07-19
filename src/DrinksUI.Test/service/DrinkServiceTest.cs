@@ -27,11 +27,11 @@ namespace DrinksUI.Test.service
                 .Options;
 
             var context = new DrinkContext(options);
-            context.Database.EnsureCreated();
 
             _sut = new DrinkService(context);
 
-            _sut.AddMockData();
+            var task = _sut.AddMockData();
+            task.Wait();
         }
 
         [OneTimeTearDown]
@@ -43,8 +43,9 @@ namespace DrinksUI.Test.service
         [Test]
         public void GetDrink()
         {
-            var task =  _sut.GetDrink(1);
-            IDrink drink = task.Result;
+            var task =  _sut.GetDrink(2);
+            // ReSharper disable once UnusedVariable
+            (IDrink drink, var notGonnaUseThis)= task.Result;
 
             Assert.That(drink, Is.Not.Null);
             Assert.That(drink.Name, Is.EqualTo("Død"));
@@ -59,6 +60,26 @@ namespace DrinksUI.Test.service
 
             Assert.That(drink, Is.Not.Null);
             Assert.That(drink.Length, Is.EqualTo(3));
+        }
+
+        [Test]
+        public void GetAllIngredients()
+        {
+            var task = _sut.GetAllIngredients();
+            IIngredient[] ingredients = task.Result.ToArray();
+
+            Assert.That(ingredients, Is.Not.Null);
+            Assert.That(ingredients.Length, Is.EqualTo(12));
+        }
+
+        [Test]
+        public void GetAvailableIngredients()
+        {
+            var task = _sut.GetAvailableIngredients();
+            IIngredient[] ingredients = task.Result.ToArray();
+
+            Assert.That(ingredients, Is.Not.Null);
+            Assert.That(ingredients.Length, Is.EqualTo(7));
         }
     }
 }

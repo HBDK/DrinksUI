@@ -37,7 +37,7 @@
             }
         </div><br>
     }
-    <input type="submit" class="btn btn-primary" value="Pour" />
+    <input type="submit" class="btn btn-primary" value="Pour" disabled="@_unAvailable"/>
 </EditForm>
 
 @code {
@@ -46,10 +46,15 @@
 
     private Drink _drink;
     private Addie[] _addies;
+    private bool _unAvailable;
 
     protected override async Task OnInitializedAsync()
     {
-        _drink = new Drink(await DrinkService.GetDrink(DrinkId));
+
+        var response = await DrinkService.GetDrink(DrinkId);
+
+        _unAvailable = !response.Item2;
+        _drink = new Drink(response.Item1);
         _addies = _drink.Addies.Select(x => new Addie(x)).ToArray();
     }
 

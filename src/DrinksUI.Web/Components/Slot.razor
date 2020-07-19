@@ -1,0 +1,42 @@
+﻿@using DrinksUI.Dtos.implementations
+@using DrinksUI.Dtos.Interfaces
+@using DrinksUI.Dtos
+
+<div class="row">
+    <div class="col-sm-2">
+        @MachineSlot.Id: @MachineSlot.DispensingType
+    </div>
+    <div class="col-sm-5">
+        <select class="form-control" onchange="">
+            <option value="">@MachineSlot.Ingredient.Type</option>
+            @foreach (var ingredient in Ingredients.Where(ingredient => ingredient.AddieType == MachineSlot.DispensingType).Where(ingredient => ingredient != MachineSlot.Ingredient))
+            {
+                <option value="@ingredient">@ingredient.Type</option>
+
+            }
+        </select>
+    </div>
+    @if (MachineSlot.DispensingType == AddieType.PushDosed)
+    {
+        <div class="col-sm-2">
+            <input class="form-control" type="number" value="@MachineSlot.Proof"/>
+        </div>
+        <div class="col-sm-1">
+            %
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public MachineSlotDto MachineSlot { get; set; }
+    
+    [Parameter]
+    public IIngredient[] Ingredients { get; set; }
+
+    [Parameter]
+    public EventCallback<MachineSlotDto> MachineSlotChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<IIngredient[]> IngredientsChanged { get; set; }
+}

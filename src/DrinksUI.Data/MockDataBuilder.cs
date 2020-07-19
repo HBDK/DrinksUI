@@ -9,6 +9,8 @@ namespace DrinksUI.Data
         public List<IngredientModel> Ingredients { get; set; }
         public List<DrinkModel> Drinks { get; set; }
 
+        public List<MachineSlotModel> Slots { get; set; }
+
         public MockDataBuilder()
         {
             Ingredients = new List<IngredientModel>(){
@@ -21,7 +23,9 @@ namespace DrinksUI.Data
                 new IngredientModel(){Type = "Apple juice", AddieType = AddieType.Poured, Unit = Unit.CL}, // 7
                 new IngredientModel(){Type = "Orange juice", AddieType = AddieType.Poured, Unit = Unit.CL}, // 8 
                 new IngredientModel(){Type = "Salt", AddieType = AddieType.Extra, Unit = Unit.Pinches}, // 9
-                new IngredientModel(){Type = "Lemon Slice", AddieType = AddieType.Extra, Unit = Unit.Pcs} // 10
+                new IngredientModel(){Type = "Lemon Slice", AddieType = AddieType.Extra, Unit = Unit.Pcs}, // 10
+                new IngredientModel(){Type = "Tonic water", AddieType = AddieType.Poured, Unit = Unit.CL}, // 11
+                new IngredientModel(){Type = "Lime Slice", AddieType = AddieType.Extra, Unit = Unit.Pcs}, // 12
             };
 
             Drinks = new List<DrinkModel>
@@ -56,8 +60,30 @@ namespace DrinksUI.Data
                         new AddieModel() {Ingredient = Ingredients[8], Amount = 1},
                         new AddieModel() {Ingredient = Ingredients[9], Amount = 1},
                     }
+                },
+                new DrinkModel()
+                {
+                    Name = "Gin n Tonic",
+                    Description = "Agreed joy vanity regret met may ladies oppose who. Mile fail as left as hard eyes. Meet made call in mean four year it to. Prospect so branched wondered sensible of up. For gay consisted resolving pronounce sportsman saw discovery not. Northward or household as conveying we earnestly believing. No in up contrasted discretion inhabiting excellence. Entreaties we collecting unpleasant at everything conviction.",
+                    Addies = new List<AddieModel>()
+                    {
+                        new AddieModel() {Ingredient = Ingredients[1], Amount = 2},
+                        new AddieModel() {Ingredient = Ingredients[10], Amount = 1}
+                    }
                 }
             };
+
+            Slots = new List<MachineSlotModel>()
+            {
+                new MachineSlotModel(){Ingredient = Ingredients[0], Proof = 40, DispensingType = Ingredients[0].AddieType},
+                new MachineSlotModel(){Ingredient = Ingredients[2], Proof = 40, DispensingType = Ingredients[2].AddieType},
+                new MachineSlotModel(){Ingredient = Ingredients[3], Proof = 40, DispensingType = Ingredients[3].AddieType},
+                new MachineSlotModel(){Ingredient = Ingredients[7], Proof = 0, DispensingType = Ingredients[7].AddieType},
+                new MachineSlotModel(){Ingredient = Ingredients[4], Proof = 0, DispensingType = Ingredients[4].AddieType},
+                new MachineSlotModel(){Ingredient = Ingredients[8], Proof = 0, DispensingType = Ingredients[8].AddieType},
+                new MachineSlotModel(){Ingredient = Ingredients[9], Proof = 0, DispensingType = Ingredients[9].AddieType},
+            };
+
         }
 
         public void SubmitThatShit(DrinkContext dbContext)
@@ -65,6 +91,8 @@ namespace DrinksUI.Data
             dbContext.AddRange(Ingredients);
             dbContext.SaveChanges();
             dbContext.AddRange(Drinks);
+            dbContext.SaveChanges();
+            dbContext.AddRange(Slots);
             dbContext.SaveChanges();
         }
 

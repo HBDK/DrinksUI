@@ -1,13 +1,18 @@
 ﻿@page "/drink/{DrinkId:int}"
 
 @using DrinksUI.Data.Services
+@using DrinksUI.Dtos.Interfaces
 @using DrinksUI.Web.Entities
+@using System.Linq;
 
 @inject DrinkService DrinkService
+@inject MachineSlotService MachineSlotService
 
 <h3>@_drink.Name</h3>
 
 <p>@_drink.Description</p>
+
+<p>@_proof.ToString("F1") %</p>
 
 <h5>Ingredients:</h5>
 
@@ -37,7 +42,7 @@
             }
         </div><br>
     }
-    <input type="submit" class="btn btn-primary" value="Pour" disabled="@_unAvailable"/>
+    <input type="submit" class="btn btn-primary" value="Pour" disabled="@_unAvailable" />
 </EditForm>
 
 @code {
@@ -48,14 +53,19 @@
     private Addie[] _addies;
     private bool _unAvailable;
 
+    private double _proof => (_addies.Where(x => x.IsLiquid).Select(x =>(double) (x.Amount * _machineSlots.First(y => y.Ingredient.Id == x.Ingredient.Id).Proof)/100).Sum() /  _addies.Where(x=>x.IsLiquid).Sum(x => x.Amount))*100;
+
+    private IMachineSlot[] _machineSlots;
+
     protected override async Task OnInitializedAsync()
     {
-
         var response = await DrinkService.GetDrink(DrinkId);
 
         _unAvailable = !response.Item2;
         _drink = new Drink(response.Item1);
         _addies = _drink.Addies.Select(x => new Addie(x)).ToArray();
+
+        _machineSlots =(await MachineSlotService.GetSlots()).ToArray();
     }
 
     void FormSubmitted(EditContext editContext)

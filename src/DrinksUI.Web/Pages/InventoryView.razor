@@ -1,0 +1,92 @@
+﻿@page "/inventory"
+@using DrinksUI.Data.Services
+@using DrinksUI.Dtos.implementations
+@using DrinksUI.Dtos.Interfaces
+@using System.Linq;
+@using DrinksUI.Dtos
+@* ReSharper disable once RedundantUsingDirective *@
+@using DrinksUI.Web.Components
+@using Microsoft.EntityFrameworkCore.ChangeTracking.Internal
+@using DrinksUI.Web.Entities
+
+
+@inject MachineSlotService MachineSlotService
+@inject DrinkService DrinkService
+
+<h3>MachineSlotView</h3>
+
+<p>
+    @for (int i = 0; i < _wets.Length; i++)
+    {
+        <Slot @bind-MachineSlot="_wets[i]" @bind-Ingredients="_ingredients"/>
+    }
+</p>
+<p>
+    <div class="row">
+        <div class="col-sm-2">
+            <select class="form-control" @bind="_selectedExtra">
+                @foreach (var ingredient in _ingredients.Where(ingredient => ingredient.AddieType == AddieType.Extra)
+                    .Where(ingredient => _notInExtras.Contains(ingredient.Id)))
+                {
+                    <option value="@ingredient.Type">@ingredient.Type</option>
+                }
+            </select>
+        </div>
+        <div class="col-sm-1">
+            <button class="btn btn-primary" @onclick="@Add">Add</button>
+        </div>
+    </div>
+
+
+    <ul>
+        @foreach (var extra in _extras)
+        {
+            <li>
+                @extra.Ingredient.Type
+            </li>
+        }
+    </ul>
+</p>
+@code {
+    private IIngredient[] _ingredients;
+    private MachineSlot[] _wets;
+    private List<MachineSlotDto> _extras;
+    private IQueryable<int> _notInExtras;
+    private string _selectedExtra;
+    const string NothingToAdd = "Nothing left to add";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await PopulateArrays();
+
+        _notInExtras = _ingredients.Where(ingredient => !_extras.Select(slot => slot.Ingredient.Id).Contains(ingredient.Id)).Select(ingredient => ingredient.Id).AsQueryable();
+        SetSelected();
+    }
+
+    protected async Task Add()
+    {
+        if (_selectedExtra == null || string.IsNullOrEmpty(_selectedExtra)) return;
+
+        var ingredient = _ingredients.First(x => x.Type == _selectedExtra);
+
+        await MachineSlotService.AddExtra(ingredient);
+
+        await PopulateArrays();
+        SetSelected();
+    }
+
+    private void SetSelected()
+    {
+        _selectedExtra = _ingredients.Where(x => x.AddieType == AddieType.Extra).FirstOrDefault(ingredient => _notInExtras.Contains(ingredient.Id))?.Type ?? NothingToAdd;
+    }
+
+    private async Task PopulateArrays()
+    {
+        var response = await MachineSlotService.GetSlots();
+        var slots = response.Select(slot => new MachineSlotDto(slot)).ToList();
+        _ingredients = (await DrinkService.GetAllIngredients()).ToArray();
+
+        _wets = slots.Where(ingredient => ingredient.DispensingType != AddieType.Extra).OrderBy(slot => slot.DispensingType).Select(slot => new MachineSlot(slot, MachineSlotService)).ToArray();
+        _extras = slots.Where(ingredient => ingredient.DispensingType == AddieType.Extra).ToList();
+    }
+}

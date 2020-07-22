@@ -26,6 +26,7 @@ namespace DrinksUI.Data
                 new IngredientModel(){Type = "Lemon Slice", AddieType = AddieType.Extra, Unit = Unit.Pcs}, // 10
                 new IngredientModel(){Type = "Tonic water", AddieType = AddieType.Poured, Unit = Unit.CL}, // 11
                 new IngredientModel(){Type = "Lime Slice", AddieType = AddieType.Extra, Unit = Unit.Pcs}, // 12
+                new IngredientModel(){Type = "Mint leaves", AddieType = AddieType.Extra, Unit = Unit.Pcs}, // 13
             };
 
             Drinks = new List<DrinkModel>
@@ -68,7 +69,8 @@ namespace DrinksUI.Data
                     Addies = new List<AddieModel>()
                     {
                         new AddieModel() {Ingredient = Ingredients[1], Amount = 2},
-                        new AddieModel() {Ingredient = Ingredients[10], Amount = 1}
+                        new AddieModel() {Ingredient = Ingredients[10], Amount = 14},
+                        new AddieModel() {Ingredient = Ingredients[11], Amount = 1}
                     }
                 }
             };
@@ -83,7 +85,6 @@ namespace DrinksUI.Data
                 new MachineSlotModel(){Ingredient = Ingredients[8], Proof = 0, DispensingType = Ingredients[8].AddieType},
                 new MachineSlotModel(){Ingredient = Ingredients[9], Proof = 0, DispensingType = Ingredients[9].AddieType},
             };
-
         }
 
         public void SubmitThatShit(DrinkContext dbContext)
@@ -95,6 +96,5 @@ namespace DrinksUI.Data
             dbContext.AddRange(Slots);
             dbContext.SaveChanges();
         }
-
     }
 }

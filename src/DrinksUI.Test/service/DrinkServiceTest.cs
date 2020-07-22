@@ -69,7 +69,7 @@ namespace DrinksUI.Test.service
             IIngredient[] ingredients = task.Result.ToArray();
 
             Assert.That(ingredients, Is.Not.Null);
-            Assert.That(ingredients.Length, Is.EqualTo(12));
+            Assert.That(ingredients.Length, Is.EqualTo(13));
         }
 
         [Test]

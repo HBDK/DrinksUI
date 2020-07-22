@@ -39,21 +39,18 @@ namespace DrinksUI.Data
             var drinks = Drinks.CountAsync();
             var ingredients = Ingredients.CountAsync();
 
-            if ((await drinks + await ingredients) == 0)
+            if ((await drinks + await ingredients) != 0) return "Already got data make sure the database is empty before you add";
+            
+            try
             {
-                try
-                {
-                    var mockData = new MockDataBuilder();
-                    mockData.SubmitThatShit(this);
-                }
-                catch
-                {
-                    return "Failed at creating mock data";
-                }
-                return "Added mock data";
+                var mockData = new MockDataBuilder();
+                mockData.SubmitThatShit(this);
             }
-
-            return "Already got data make sure the database is empty before you add";
+            catch
+            {
+                return "Failed at creating mock data";
+            }
+            return "Added mock data";
         }
 
         public async Task<string> DeleteMockData()
